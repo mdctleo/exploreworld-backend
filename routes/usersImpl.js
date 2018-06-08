@@ -1,4 +1,3 @@
-var express = require('express');
 var db = require('./server');
 var credentialVault = require('./credentialVault');
 
@@ -15,7 +14,6 @@ function createUser(user){
     db.database.connect();
     db.database.query(sql, [values], function(err, result){
         if(err) {
-            db.database.end();
             throw err;
         }else{
            credentialVault.createFingerprint(result.insertId);

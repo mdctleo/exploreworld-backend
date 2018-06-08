@@ -6,7 +6,6 @@ var usersImpl = require('./usersImpl');
 /* GET users listing. */
 router.post('/createusers', function(req, res, next) {
     //Verify request here
-    console.log(req.body);
 
     try{
     usersImpl.createUser(req.body);
@@ -17,7 +16,7 @@ router.post('/createusers', function(req, res, next) {
     }
 
     res.status(200);
-    res.json({"error": null, "payload": null })
+    res.json({"error": null, "payload": "test" })
 });
 
 module.exports = router;

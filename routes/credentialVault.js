@@ -30,10 +30,10 @@ function createFingerprint(insertId){
             }else{
                  sql =  "UPDATE " + db.TABLE_USER + " SET " + db.COLUMN_FINGERPRINT + " = ? WHERE " + db.COLUMN_ID + " = ?";
                 db.database.query(sql, [fingerprint, insertId], function(err, result){
-                    db.database.end();
                     if(err){
                         throw err;
                     }else{
+                        db.database.end();
                     }
                 });
             }
