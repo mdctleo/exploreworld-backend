@@ -5,23 +5,16 @@ var errors = require('./error');
 
 //Initial picture request
 router.post('/initpicture', function(req, res){
-    var fingerprint = req.body.fingerprint;
+    var fingerprint = req.session.user;
     console.log(fingerprint);
 
     if (fingerprint == null) {
         res.status(400);
-        res.json({"error": errors.invalidFingerPrint.type, "payload": errors.invalidFingerPrint.message });
-        return;
-    }
-        try {
-            var segments = pictureImpl.createSession(fingerprint);
-        } catch (err) {
-            res.status(500);
-            res.json({"error": err, "payload": err.message});
-        }
+        res.json({"error": errors.authorization.type, "payload": errors.authorization.message });
 
-        res.status(200);
-        res.json({"error": null, "payload": segments});
+    }else{
+        pictureImpl.getInitPictures(fingerprint, res);
+    }
 
 });
 

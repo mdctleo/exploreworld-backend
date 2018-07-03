@@ -1,22 +1,19 @@
 var express = require('express');
 var router = express.Router();
 var usersImpl = require('./usersImpl');
+var errors = require('./error');
+
 
 
 /* GET users listing. */
-router.post('/createusers', function(req, res, next) {
+router.post('/createusers', function (req, res, next) {
     //Verify request here
+        usersImpl.createUser(req.body, res);
 
-    try{
-    usersImpl.createUser(req.body);
-    }catch(err){
-        console.log(err);
-        res.status(500);
-        res.json({"error": err, "payload" : err.message});
-    }
+});
 
-    res.status(200);
-    res.json({"error": null, "payload": "test" })
+router.post('/login', function (req, res, next) {
+        usersImpl.authenticateUser(req.body, res, req);
 });
 
 module.exports = router;

@@ -1,9 +1,17 @@
 const mysql = require('mysql');
 
-const con = mysql.createConnection({
-    host: "localhost",
-    user: "exploreworld",
-    password: "vkwWXLSXGB8vo6mz",
+// const con = mysql.createConnection({
+//     host: "localhost",
+//     user: "exploreworld",
+//     password: "vkwWXLSXGB8vo6mz",
+//     database: "exploreworld"
+// });
+
+var pool = mysql.createPool({
+    connectionLimit : 10,
+    host : "localhost",
+    user : "exploreworld",
+    password : "vkwWXLSXGB8vo6mz",
     database: "exploreworld"
 });
 
@@ -11,7 +19,7 @@ const con = mysql.createConnection({
 
 
 module.exports = {
-    database: con,
+    database: pool,
 
     //TABLE USERS CONSTANTS
     TABLE_USER: "users",

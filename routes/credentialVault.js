@@ -32,8 +32,6 @@ function createFingerprint(insertId){
                 db.database.query(sql, [fingerprint, insertId], function(err, result){
                     if(err){
                         throw err;
-                    }else{
-                        db.database.end();
                     }
                 });
             }

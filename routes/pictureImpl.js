@@ -1,23 +1,22 @@
 var db = require('./server');
 
 
-function createSession(fingerprint){
-    //Validates user is logged in, creates a session for user
-    var values = [[fingerprint, 2]];
-    var sql = "INSERT INTO " + db.TABLE_SESSION + "(" + db.COLUMN_S_USER_FINGERPRINT + "," + db.COLUMN_S_SEGMENT_COUNT +  ")" + " VALUES ?";
-    db.database.connect();
-    db.database.query(sql, [values], function(err, result){
-        if(err) {
-            throw err;
-        }else{
-           return getInitPictures(result.insertId);
-        }
-    });
+// function createSession(fingerprint){
+//     //creates a session for user
+//     var values = [[fingerprint, 2]];
+//     var sql = "INSERT INTO " + db.TABLE_SESSION + "(" + db.COLUMN_S_USER_FINGERPRINT + "," + db.COLUMN_S_SEGMENT_COUNT +  ")" + " VALUES ?";
+//     db.database.query(sql, [values], function(err, result){
+//         if(err) {
+//             throw err;
+//         }else{
+//            return getInitPictures(result.insertId);
+//         }
+//     });
+//
+// }
 
-}
 
-
-function getInitPictures(sessionId){
+function getInitPictures(sessionId, res){
 
     var segments = createSegments(sessionId, 2);
 
@@ -31,9 +30,11 @@ function getInitPictures(sessionId){
 
     db.database.query(sql, [values], function(err, result){
         if(err) {
-            throw err;
+            res.status(500);
+            res.json({"error": err, "payload": err.message});
         }else{
-            return segments;
+            res.status(200);
+            res.json({"error": null, "payload": segments});
         }
     });
 }
@@ -84,6 +85,6 @@ function checkDuplicates(array, int){
 
 
 module.exports = {
-    createSession: createSession,
+    // createSession: createSession,
     getInitPictures: getInitPictures
 };
