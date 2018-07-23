@@ -4,7 +4,7 @@ var pictureImpl = require('./pictureImpl');
 var errors = require('./error');
 
 //Initial picture request
-router.post('/initpicture', function(req, res){
+router.get('/initpicture', function(req, res){
     var fingerprint = req.session.user;
     console.log(fingerprint);
 
@@ -13,7 +13,9 @@ router.post('/initpicture', function(req, res){
         res.json({"error": errors.authorization.type, "payload": errors.authorization.message });
 
     }else{
-        pictureImpl.getInitPictures(fingerprint, res);
+        var pictures = pictureImpl.getInitPictures(fingerprint);
+        res.status(200);
+        res.json({"error": null, "payload": pictures});
     }
 
 });

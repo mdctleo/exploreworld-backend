@@ -16,41 +16,22 @@ var db = require('./server');
 // }
 
 
-function getInitPictures(sessionId, res){
+function getInitPictures(){
 
-    var segments = createSegments(sessionId, 2);
-
-    var values = segments;
-    var sql = "INSERT INTO " + db.TABLE_SEGMENT +
-        "(" + db.COLUMN_SEG_SESSION_ID + ", " + db.COLUMN_SEG_PIC0 + ", " + db.COLUMN_SEG_PIC1 + ", "
-            + db.COLUMN_SEG_PIC2 + ", " + db.COLUMN_SEG_PIC3 + ", " + db.COLUMN_SEG_PIC4 + ", " + db.COLUMN_SEG_PIC5 + ", "
-            + db.COLUMN_SEG_PIC6 + ", " + db.COLUMN_SEG_PIC7 + ", " + db.COLUMN_SEG_PIC8 + ", " + db.COLUMN_SEG_PIC9
-            + ")"
-            + " VALUES ?";
-
-    db.database.query(sql, [values], function(err, result){
-        if(err) {
-            res.status(500);
-            res.json({"error": err, "payload": err.message});
-        }else{
-            res.status(200);
-            res.json({"error": null, "payload": segments});
-        }
-    });
+    return createSegments(2);
 }
 
-function createSegments(sessionId, num){
+function createSegments(num){
     var segments = [];
     var i;
     for(i = 0; i < num; i++){
 
         var segment = [];
-        segment.push(sessionId);
 
         var x;
         for(x = 0; x < 10; x++){
             var randomInt = getRandomInt();
-            while(checkDuplicates(segment.slice(1), randomInt)){
+            while(checkDuplicates(segment, randomInt)){
                 randomInt = getRandomInt();
             }
 
