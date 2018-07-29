@@ -18,18 +18,16 @@ var db = require('./server');
 
 function getInitPictures(){
 
-    return createSegments(2);
+    var arr1 = createSegments(10);
+    var arr2 = createSegments(10);
+
+    return arr1.concat(arr2);
 }
 
 function createSegments(num){
-    var segments = [];
     var i;
-    for(i = 0; i < num; i++){
-
-        var segment = [];
-
-        var x;
-        for(x = 0; x < 10; x++){
+    var segment = [];
+        for(i = 0; i < num; i++){
             var randomInt = getRandomInt();
             while(checkDuplicates(segment, randomInt)){
                 randomInt = getRandomInt();
@@ -37,13 +35,9 @@ function createSegments(num){
 
             segment.push(randomInt);
 
-            if(x === 9){
-                segments.push(segment);
-            }
-        }
     }
 
-    return segments;
+    return segment;
 }
 
 
