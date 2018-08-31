@@ -1,23 +1,29 @@
 
 
 const invalidFingerPrint = {
-    type: "InvalidRequestParameter",
+    status: "InvalidRequestParameter",
     message: "the provided fingerprint is invalid"
 };
 
 const invalidCredentials = {
-    type: "InvalidCredentials" ,
+    status: "InvalidCredentials" ,
     message: "the email or password provided is incorrect"
 };
 
 const authorization = {
-    type: "InvalidAuthorization",
+    status: "InvalidAuthorization",
     message: "please log in to proceed"
+};
+
+const initPics = {
+    status: "InitPicturesFailure",
+    message: "Failed to retrive initial pictures"
 };
 
 
 module.exports = {
     invalidFingerPrint : invalidFingerPrint,
     invalidCrendentials: invalidCredentials,
-    authorization : authorization
+    authorization : authorization,
+    initPics :  initPics
 };

@@ -29,6 +29,14 @@ module.exports = {
     COLUMN_USERNAME: "username",
     COLUMN_PASSWORD: "password",
 
+    //TABLE PICTURES CONSTANTS
+    TABLE_PICTURES: "pictures",
+    COLUMN_P_PICTUREID: "pictureid",
+    COLUMN_P_ORIGINAL_NAME: "name",
+    COLUMN_P_PICTURE_PATH: "picture_path",
+    COLUMN_P_ORIGINAL_WIDTH: "original_width",
+    COLUMN_P_ORIGINAL_HEIGHT: "original_height",
+
     //TABLE USERS_PICTURES CONSTANTS
     TABLE_USERS_PICTURES: "users_pictures",
     COLUMN_UP_ID: "id",
@@ -40,5 +48,5 @@ module.exports = {
 
 
 
-    PICTURE_MAX: 10
+    PICTURE_MAX: 20
 };

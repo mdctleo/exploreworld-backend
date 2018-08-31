@@ -1,43 +1,87 @@
 var db = require('./server');
+var errors = require('./error');
 
 
-// function createSession(fingerprint){
-//     //creates a session for user
-//     var values = [[fingerprint, 2]];
-//     var sql = "INSERT INTO " + db.TABLE_SESSION + "(" + db.COLUMN_S_USER_FINGERPRINT + "," + db.COLUMN_S_SEGMENT_COUNT +  ")" + " VALUES ?";
-//     db.database.query(sql, [values], function(err, result){
-//         if(err) {
-//             throw err;
-//         }else{
-//            return getInitPictures(result.insertId);
-//         }
-//     });
-//
-// }
+function getInitPictures(fingerprint){
+
+    return new Promise(function(resolve, reject){
+
+    createSegments(13, fingerprint)
+        .then(function(result){
+            return resolve(result);
+
+    }).catch(function(err){
+        return reject(err);
+    })
+
+});
 
 
-function getInitPictures(){
 
-    var arr1 = createSegments(10);
-    var arr2 = createSegments(10);
 
-    return arr1.concat(arr2);
 }
 
-function createSegments(num){
-    var i;
-    var segment = [];
-        for(i = 0; i < num; i++){
-            var randomInt = getRandomInt();
-            while(checkDuplicates(segment, randomInt)){
-                randomInt = getRandomInt();
+function createSegments(num, fingerprint) {
+    return new Promise(function (resolve, reject) {
+        checkDuplicates(fingerprint)
+            .then(function (result) {
+
+                var arrDuplicates = result;
+                var arrRandomInts = [];
+                for (var i = 0; i < num; i++) {
+                    var randomInt = getRandomInt();
+
+                    while (arrDuplicates.find(function (curr) {
+                        return curr === randomInt;
+                    }) !== undefined) {
+
+                        randomInt = getRandomInt();
+                    }
+
+                    arrDuplicates.push(randomInt);
+                    arrRandomInts.push(randomInt);
+                }
+
+                return getPictures(arrRandomInts);
+
+            })
+            .then(function (result) {
+                return resolve(result);
+            })
+            .catch(function (err) {
+                // console.log(err);
+                return reject(err);
+            });
+
+    });
+
+}
+
+function getPictures(arrRandomInts){
+
+    return new Promise(function(resolve, reject){
+        var sql = "SELECT " + db.COLUMN_P_PICTUREID + ", " + db.COLUMN_P_PICTURE_PATH + ", " + db.COLUMN_P_ORIGINAL_WIDTH + ", " + db.COLUMN_P_ORIGINAL_HEIGHT
+                    + " FROM " + db.TABLE_PICTURES + " WHERE " + db.COLUMN_P_PICTUREID
+                    + " IN (";
+        var i;
+        for(i = 0; i < arrRandomInts.length; i++){
+           sql = sql + arrRandomInts[i] + ",";
+        }
+
+        sql = sql.substring(0, sql.length - 1);
+        sql = sql + ");";
+
+        db.database.query(sql, function(err, result, fields){
+
+            if(err){
+                return reject(err);
+            }else{
+                return resolve(result);
             }
 
-            segment.push(randomInt);
+    });
 
-    }
-
-    return segment;
+});
 }
 
 
@@ -46,16 +90,23 @@ function getRandomInt(){
     return Math.floor(Math.random() * Math.floor(db.PICTURE_MAX)) + 1;
 }
 
-function checkDuplicates(array, int){
-    var counter = 0;
-    array.filter(function(e){
+function checkDuplicates(fingerprint){
 
-        if(e === int){
-            counter++;
+    return new Promise(function(resolve, reject){
+    // SELECT picture_id FROM users_pictures WHERE user_fingerprint = 'OSPp2R';
+    var sql = "SELECT " + db.COLUMN_UP_PICTURE_ID + " FROM " + db.TABLE_USERS_PICTURES
+    + " WHERE " + db.COLUMN_UP_USER_FINGERPRINT + " = ?";
+
+    db.database.query(sql, [fingerprint], function(err, result, fields){
+        if(err){
+           return reject(err);
+        }else{
+            return resolve(result);
         }
     });
 
-    return counter >= 1;
+});
+
 }
 
 

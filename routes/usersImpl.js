@@ -44,7 +44,7 @@ function authenticateUser(user, res, req){
         }else{
             if(result.length === 0){
                 res.status(400);
-                res.json({"error" : errors.invalidCrendentials.type, "payload": errors.invalidCrendentials.message});
+                res.json({"error" : errors.invalidCrendentials.status, "payload": errors.invalidCrendentials.message});
                 return;
             }
 
@@ -54,7 +54,7 @@ function authenticateUser(user, res, req){
 
             if(fingerprint == null){
                 res.status(400);
-                res.json({"error": errors.invalidCrendentials.type, "payload": errors.invalidCrendentials.message});
+                res.json({"error": errors.invalidCrendentials.status, "payload": errors.invalidCrendentials.message});
             }else {
                 req.session.user = fingerprint;
                 res.status(200);
